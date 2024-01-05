@@ -28,5 +28,8 @@ py manage.py runserver
 
 ### Cara kerja sistem (Workflow) 
 
+- preview :
+![](./img/workflow.png)
+
 .... 
 ...
