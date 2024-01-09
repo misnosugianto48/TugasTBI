@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search.in</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <style>
+      #searchIn {
+        background: -webkit-linear-gradient(45deg, #38bfc3, #009dd2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 80px; /* Menyesuaikan margin atas agar tidak bertabrakan dengan navbar */
+      }
+
+      .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        width: 100%; /* Menyesuaikan lebar kontainer agar sejajar dengan input */
+      }
+
+      .search-input {
+        padding: 18px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px 0 0 20px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+        width: 50%;
+        outline: none; /* Menyembunyikan outline */
+      }
+
+      .search-button {
+        background-color: #38bfc3;
+        color: #fff;
+        border: none;
+        padding: 18px;
+        cursor: pointer;
+        border-radius: 0 20px 20px 0;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .search-button i {
+        font-size: 18px;
+      }
+
+      .search-input::placeholder {
+        color: #888;
+        padding: 10px;
+      }
+
+      .bg-footer {
+        background: -webkit-linear-gradient(25deg, #38bfc3, #444040);
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- nav -->
+    <nav
+      class="navbar navbar-expand-lg bg-body shadow-sm p-3 mb-5 bg-body rounded"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" id="navbar-logo">
+          <img src="./images/logo.png" alt="logo" width="50" />
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link fw-semibold" href="#"
+                ><i class="bi bi-mortarboard-fill"></i> Profile Saya</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-semibold" href="#"
+                ><i class="bi bi-star-fill"></i> Perpustakaan Saya</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="d-flex" id="navbar-profile">
+          <div class="p-2">
+            <img
+              src="./images/profile.png"
+              alt="profile"
+              width="50"
+              class="rounded-pill"
+            />
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- end nav -->
+
+    <!-- search -->
+    <h1 class="mt-5 fw-semibold fs-1" id="searchIn">Search.in</h1>
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search ..." />
+      <button type="submit" class="search-button">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+    <!-- end search -->
+
+    <!-- footer -->
+    <footer>
+      <nav class="navbar fixed-bottom bg-footer">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"></a>
+        </div>
+      </nav>
+    </footer>
+    <!-- end footer -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
