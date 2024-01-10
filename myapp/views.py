@@ -6,94 +6,58 @@ import requests
 from bs4 import BeautifulSoup
 
 from myapp.models import Jurnal
+import myapp.modeltbi.QueryExpansion as QueryExpansionModule
+import myapp.modeltbi.textPreProcessing as textPreProcessingModule
+import myapp.modeltbi.vsm as vsmModel
 
+all_jurnals = Jurnal.objects.all()
+
+documents = []
+text_preprocessor = textPreProcessingModule.TextPreProcessing()
+vsmmodel = vsmModel.vsm()
 
 # Create your views here.
+def send_to_model(query):
+    # Query Expansion
+    query_expander = QueryExpansionModule.QueryExpansion()
 
-def get_search_results(query):
-    page_number = 1
-    results = []
+    query = query_expander.expand_query(query)
+    print()
+    
+    print(f"Query baru hasil expansion: {query}\n")
 
-    while True:
-        search_url = f'https://jurnal.fikom.umi.ac.id/index.php/ILKOM/search/search?query={query}&searchJournal=1&authors=&title=&abstract=&galleyFullText=&suppFiles=&discipline=&subject=&type=&coverage=&indexTerms=&dateFromMonth=&dateFromDay=&dateFromYear=&dateToMonth=&dateToDay=&dateToYear=&orderBy=&orderDir=&searchPage={page_number}#results'
+    return textPreProcessing(query, all_jurnals)
 
-        print(search_url)
+def textPreProcessing(query, data):
+    corpus =     text_preprocessor.textprocessing(data)
+    for (index, linkjurnal, abstrak,  preprocessed_text) in corpus:
+        print()
+        print(f" Index : {index},\n Judul : {preprocessed_text}")
+        print()
+        documents.append({'id': index, 'link': linkjurnal, 'abstrak': abstrak, 'preprocessed_text': preprocessed_text})
 
-        print(f'{str(search_url)}\n')
-        response = requests.get(search_url)
-        html_content = response.content
-        soup = BeautifulSoup(html_content, 'html.parser')
+    result_top_document = []
+    top_documents = vsmmodel.calculate_vsm(query, corpus)
+    print("\n7 Peringkat Dokumen Teratas:")        
+    for index, array_value in top_documents:
+        value = array_value[0]
+        if value == 0.0:
+            pass
+        else:
+            print(f"Judul : {documents[index]['preprocessed_text']} \nRANK : {value}\n Abstrak: {documents[index]['abstrak']}\n Link Jurnal: {documents[index]['link']} \n\n")
+            print()
+            result_top_document.append({'id': index, 'rank': value, 'judul': documents[index]['preprocessed_text'], 'link': documents[index]['link'], 'abstrak': documents[index]['abstrak']})
+    return result_top_document
 
-        issue_rows = soup.select('tr[valign="top"]')
-
-        if "No Results" in str(html_content):
-            
-            break  # No more pages, exit the loop
-
-        
-
-        for row in issue_rows:
-            i = 1
-            link = row.select_one('td a[href^="https://jurnal.fikom.umi.ac.id/index.php/ILKOM/issue/view/"]')
-            title = row.select_one('td[width="30%"]')
-            abstract = row.select_one('td a[href^="https://jurnal.fikom.umi.ac.id/index.php/ILKOM/article/view/"]')
-            
-
-            if link and title:
-                link_url = link['href']
-                title_text = title.text.strip()
-                abstract_url = abstract['href']
-
-                response2 = requests.get(abstract_url)
-                html_content2 = response2.content
-                soup2 = BeautifulSoup(html_content2, 'html.parser')
-
-                rows = soup2.select_one('div[id="articleAbstract"] div')
-
-                abstract_text = rows.text.strip()
-
-                id = generate_random_string()
-
-                jurnal = Jurnal(
-                    id = id,
-                    title = title.text,
-                    abstract = abstract_text,
-                    link =  link_url,
-                    abstracturl = abstract_url
-                )
-
-                
-                jurnal.save()
-
-                
-
-                results.append({'title': title_text, 'link': link_url, 'abstract' : abstract_text})
-
-                # Output the result
-                print("Title:", title_text)
-                print("Link:", link_url)
-                print("Abstract URL", abstract_url)
-                print("Abstract Content", abstract_text)
-                print()
-                i+=1
-
-            
-
-                
-
-        
-
-        # Move to the next page
-        page_number += 1
-
-        return results
+# def get_search_results(query):
+# # pass
 
 def home(request):
     return render(request, "home.html")
 
 def results(request):
     query = request.GET.get('q', '')
-    results = get_search_results(query)
+    results = send_to_model(query)
     return render(request, 'results.html', {'query': query, 'results': results})
 
 def generate_random_string():
